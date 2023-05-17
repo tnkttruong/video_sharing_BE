@@ -4,7 +4,7 @@ class V1::AuthController < ApplicationController
     operator.call
     render_json({
       data: operator.user,
-      serializer: UserSerializer
+      serializer: UserLoginSerializer
     })
   end
 end

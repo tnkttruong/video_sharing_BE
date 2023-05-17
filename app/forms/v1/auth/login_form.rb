@@ -3,7 +3,7 @@ class V1::Auth::LoginForm < ApplicationForm
   attribute :password
 
   validates :user, presence: true
-	validates :password, presence: true
+  validates :password, presence: true
   with_options if: :exists_user? do
     validate :check_password_valid
   end
@@ -14,6 +14,6 @@ class V1::Auth::LoginForm < ApplicationForm
   end
 
   def exists_user?
-  	user&.id
+    user&.id
   end
 end

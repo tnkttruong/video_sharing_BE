@@ -11,7 +11,7 @@ class ApplicationForm
     self.class.attribute_names.each do |attr|
       self.class.attribute attr.to_sym
     end
-    super attributes
+    super(attributes)
   end
 
   def valid!
