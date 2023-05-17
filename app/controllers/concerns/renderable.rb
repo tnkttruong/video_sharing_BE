@@ -10,20 +10,11 @@ module Renderable
   end
 
   def render_json(render_params = {})
-    object = render_params[:object]
+    data = render_params[:data]
     serializer = render_params[:serializer]
     status = render_params[:status] || 200
-    code = render_params[:code] || 1
-    meta = render_params[:meta]
     is_array = render_params[:is_array]
-    if serializer
-      if is_array
-        render json: object, each_serializer: serializer
-      else
-        render json: object, serializer: serializer
-      end
-    else
-      render json: object, status: status
-    end
+    return render(json: data, status: status) if !serializer || data.blank?
+    is_array ? render(json: data, each_serializer: serializer) : render(json: data, serializer: serializer)
   end
 end
