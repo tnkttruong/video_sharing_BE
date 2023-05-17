@@ -16,4 +16,13 @@ class V1::VideosController < AuthenticationController
       data: true,
     })
   end
+
+  def show
+    operator = V1::Videos::ShowOperation.new(params, current_user)
+    operator.call
+    render_json({
+      data: operator.video,
+      serializer: VideoSerializer
+    })
+  end
 end

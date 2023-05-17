@@ -2,6 +2,7 @@ class V1::Videos::CreateOperation < ApplicationOperation
   def call
     validation!
     create_video
+    push_notification
   end
 
   private
@@ -13,5 +14,9 @@ class V1::Videos::CreateOperation < ApplicationOperation
   def create_video
     form.video.user_id = current_user.id
     form.video.save
+  end
+
+  def push_notification
+    PushNewVideoNotificationJob.perform_later(form.video)
   end
 end
