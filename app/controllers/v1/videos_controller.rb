@@ -1,4 +1,5 @@
-class V1::VideosController < AuthenticationController
+class V1::VideosController < ApplicationController
+  before_action :authenticate_user!, only: :create
   def index
     operator = V1::Videos::IndexOperation.new(params, current_user)
     operator.call

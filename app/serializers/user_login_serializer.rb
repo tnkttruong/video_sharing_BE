@@ -1,3 +1,3 @@
 class UserLoginSerializer < UserSerializer
-  attributes :auth_token
+  attributes :id, :auth_token
 end
