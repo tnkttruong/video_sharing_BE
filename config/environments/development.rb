@@ -62,13 +62,12 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
+  Aws.config.update({
+    region: ENV["AWS_REGION"],
+    credentials: Aws::Credentials.new(ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_SECRET_ACCESS_KEY"])
+  })
   environment = 'development'
   ssm = Aws::SSM::Client.new(region: 'ap-southeast-1')
-  ENV['DB_NAME'] = ssm.get_parameter({name: "/#{environment}/database_name"}).parameter.value
-  ENV['DB_HOST'] = ssm.get_parameter({name: "/#{environment}/database_host"}).parameter.value
-  ENV['DB_USER_NAME'] = ssm.get_parameter({name: "/#{environment}/database_username"}).parameter.value
-  ENV['DB_PASSWORD'] = ssm.get_parameter({name: "/#{environment}/database_password", with_decryption: true}).parameter.value
-  ENV['DB_PORT'] = ssm.get_parameter({name: "/#{environment}/database_port"}).parameter.value
   ENV['JWT_LOGIN_SECRET_KEY'] = ssm.get_parameter({name: "/#{environment}/jwt_login_secret_ket", with_decryption: true}).parameter.value
   ENV['YOUTUBE_API_KEY'] = ssm.get_parameter({name: "/#{environment}/youtube_api_key", with_decryption: true}).parameter.value
   ENV['FIREBASE_URL'] = ssm.get_parameter({name: "/#{environment}/firebase_url"}).parameter.value
