@@ -3,6 +3,7 @@ class V1::Auth::LoginOperation < ApplicationOperation
   def call
     find_user
     validation!
+    save_user
     login
   end
 
@@ -17,9 +18,13 @@ class V1::Auth::LoginOperation < ApplicationOperation
     form.valid!
   end
 
-  def login
+  def save_user
+    return if @form.user.id
     @user.set_encrypted_password(form.password)
     @user.save
+  end
+
+  def login
     @user.auth_token = get_token
   end
 

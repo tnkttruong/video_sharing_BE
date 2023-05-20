@@ -1,4 +1,4 @@
 class VideoSerializer < ActiveModel::Serializer
   attributes :id, :title, :video_id, :detail
-  has_one :user, serializer: UserSerializer
+  belongs_to :user, serializer: UserSerializer
 end

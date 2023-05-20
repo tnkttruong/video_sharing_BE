@@ -57,4 +57,10 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+  environment = 'development'
+  ssm = Aws::SSM::Client.new(region: 'ap-southeast-1')
+  ENV['JWT_LOGIN_SECRET_KEY'] = ssm.get_parameter({name: "/#{environment}/jwt_login_secret_ket", with_decryption: true}).parameter.value
+  ENV['YOUTUBE_API_KEY'] = ssm.get_parameter({name: "/#{environment}/youtube_api_key", with_decryption: true}).parameter.value
+  ENV['FIREBASE_URL'] = ssm.get_parameter({name: "/#{environment}/firebase_url"}).parameter.value
+  ENV['FIREBASE_SECRET_KEY'] = ssm.get_parameter({name: "/#{environment}/firebase_secret_key", with_decryption: true}).parameter.value
 end
