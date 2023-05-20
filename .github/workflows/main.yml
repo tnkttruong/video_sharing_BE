@@ -54,7 +54,7 @@ jobs:
         bundle exec rake db:schema:load
 
     - name: Run Sidekiq
-      run: bundle exec sidekiq -C config/sidekiq.yml
+      run: bundle exec sidekiq -C config/sidekiq.yml &
 
     - name: Run tests
       run: bundle exec rspec
