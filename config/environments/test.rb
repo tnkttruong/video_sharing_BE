@@ -57,6 +57,10 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+  Aws.config.update({
+    region: ENV["AWS_REGION"],
+    credentials: Aws::Credentials.new(ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_SECRET_ACCESS_KEY"])
+  })
   environment = 'development'
   ssm = Aws::SSM::Client.new(region: 'ap-southeast-1')
   ENV['JWT_LOGIN_SECRET_KEY'] = ssm.get_parameter({name: "/#{environment}/jwt_login_secret_ket", with_decryption: true}).parameter.value

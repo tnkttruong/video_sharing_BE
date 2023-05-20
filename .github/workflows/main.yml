@@ -12,7 +12,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:11
+        image: postgres
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -42,6 +42,9 @@ jobs:
         DB_HOST: localhost
         DB_PORT: 5432
         DB_NAME: video_sharing_test
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
       run: |
         bundle exec rake db:create
         bundle exec rake db:schema:load
