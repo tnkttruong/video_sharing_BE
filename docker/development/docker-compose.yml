@@ -9,9 +9,7 @@ services:
     volumes:
       - ../../tmp/db:/var/lib/postgresql/data
   api:
-    build: 
-      context: ../../
-      dockerfile: docker/development/Dockerfile
+    build: ../../
     tty: true
     stdin_open: true
     env_file:
@@ -28,9 +26,7 @@ services:
     volumes:
       - ../../tmp/db:/var/lib/redis/data
   sidekiq:
-    build: 
-      context: ../../
-      dockerfile: docker/development/Dockerfile
+    build: ../../
     command: 'bundle exec sidekiq -C config/sidekiq.yml'
     volumes:
       - ../../:/myapp
