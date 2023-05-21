@@ -83,4 +83,19 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+  Aws.config.update({
+    region: ENV["AWS_REGION"],
+    credentials: Aws::Credentials.new(ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_SECRET_ACCESS_KEY"])
+  })
+  environment = 'development'
+  ssm = Aws::SSM::Client.new(region: 'ap-southeast-1')
+  ENV['DB_HOST'] = ssm.get_parameter({name: "/#{environment}/database_host"}).parameter.value
+  ENV['DB_USER_NAME'] = ssm.get_parameter({name: "/#{environment}/database_username"}).parameter.value
+  ENV['DB_PASSWORD'] = ssm.get_parameter({name: "/#{environment}/database_password", with_decryption: true}).parameter.value
+  ENV['DB_PORT'] = ssm.get_parameter({name: "/#{environment}/database_port"}).parameter.value
+  ENV['DB_NAME'] = ssm.get_parameter({name: "/#{environment}/database_name"}).parameter.value
+  ENV['JWT_LOGIN_SECRET_KEY'] = ssm.get_parameter({name: "/#{environment}/jwt_login_secret_ket", with_decryption: true}).parameter.value
+  ENV['YOUTUBE_API_KEY'] = ssm.get_parameter({name: "/#{environment}/youtube_api_key", with_decryption: true}).parameter.value
+  ENV['FIREBASE_URL'] = ssm.get_parameter({name: "/#{environment}/firebase_url"}).parameter.value
+  ENV['FIREBASE_SECRET_KEY'] = ssm.get_parameter({name: "/#{environment}/firebase_secret_key", with_decryption: true}).parameter.value
 end
