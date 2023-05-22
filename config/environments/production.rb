@@ -98,4 +98,6 @@ Rails.application.configure do
   ENV['YOUTUBE_API_KEY'] = ssm.get_parameter({name: "/#{environment}/youtube_api_key", with_decryption: true}).parameter.value
   ENV['FIREBASE_URL'] = ssm.get_parameter({name: "/#{environment}/firebase_url"}).parameter.value
   ENV['FIREBASE_SECRET_KEY'] = ssm.get_parameter({name: "/#{environment}/firebase_secret_key", with_decryption: true}).parameter.value
+  ENV['SECRET_KEY_BASE'] = ssm.get_parameter({name: "/#{environment}/secret_key_base", with_decryption: true}).parameter.value
+  config.secret_key_base = ENV['SECRET_KEY_BASE']
 end
