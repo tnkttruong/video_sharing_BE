@@ -1,3 +1,25 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - REPOSITORY_URI=496737041968.dkr.ecr.ap-southeast-1.amazonaws.com/demo-rails-app
+      - echo $(aws ecr get-login-password --region ap-southeast-1) | docker login --username AWS --password-stdin $REPOSITORY_URI
+      - TIME_STAMP=$( date +%s )
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:v$TIME_STAMP
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push $REPOSITORY_URI:v$TIME_STAMP
+      - echo Writing image definitions file...
+      - printf '[{"name":"video_sharing_sidekiq","imageUri":"%s"}]' $REPOSITORY_URI:v$TIME_STAMP > imagedefinitions-sidekiq.json
 artifacts:
-  files:
-    - imagedefinitions-sidekiq.json
+  files: imagedefinitions-sidekiq.json

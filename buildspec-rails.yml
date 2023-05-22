@@ -20,6 +20,6 @@ phases:
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:v$TIME_STAMP
       - echo Writing image definitions file...
-      - printf '[{"name":"web","imageUri":"%s"}]' $REPOSITORY_URI:v$TIME_STAMP > imagedefinitions-rails.json
+      - printf '[{"name":"video_sharing_api","imageUri":"%s"}]' $REPOSITORY_URI:v$TIME_STAMP > imagedefinitions-rails.json
 artifacts:
   files: imagedefinitions-rails.json
