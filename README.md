@@ -1,3 +1,7 @@
+## Video Sharing BE
+
+[Project overview](https://github.com/tnkttruong/video_sharing)
+
 ## Tech Stack
 
 * Ruby on Rails - Server-side web application framework written in Ruby
@@ -59,27 +63,26 @@ bin/dev
 
 Run test
 ```
-bundle exec rspec
+RAILS_ENV=test bundle exec rspec
 ```
+## [API Document](https://video-sharing-api.dubbing.co/api-docs/index.html)
+
 ## Deployment
 
-To deploy the application, follow these steps:
+We are using AWS CodePipeline for our CI/CD pipeline. When a change is pushed to GitHub, CodePipeline is automatically triggered.
 
-1. Build the Docker image:
-    ```
-    docker buildx build --platform=linux/amd64 --progress=plain -t video_sharing_api .
-    ```
+Once the pipeline is set up, the deployment process becomes:
 
-2. Tag the Docker image with your ECR URI and your chosen tag or version:
-    ```
-    docker tag video_sharing_api YOUR_ECR_URI:YOUR_TAG/VERSION
-    ```
+1. **Commit and push changes**
 
-3. Push the Docker image to your ECR repository:
-    ```
-    docker push YOUR_ECR_URI:YOUR_TAG/VERSION
-    ```
+   When you push your changes to your GitHub repository, this will automatically trigger the pipeline.
 
-4. Create a new Task definition with your ECR URI and your chosen tag or version.
+2. **CodeBuild builds the Docker image**
 
-5. Update the ECS service to use the latest Task definition.
+   AWS CodeBuild will automatically build a Docker image from your source code and push it to Amazon ECR. This happens in the build stage of your pipeline.
+
+3. **CodeDeploy deploys the new image**
+
+   AWS CodeDeploy will automatically update the ECS service to use the new Docker image. This happens in the deploy stage of your pipeline.
+
+By this method, the deployment process is completely automated, reducing the chance of errors and increasing the speed at which new versions can be deployed.
