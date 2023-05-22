@@ -14,6 +14,9 @@ phases:
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:v$TIME_STAMP
+      - echo Migrate Database...
+      - docker run -e RAILS_ENV -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e $REPOSITORY_URI bundle exec rake db:migrate:status
+      - docker run -e RAILS_ENV -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e $REPOSITORY_URI bundle exec rake db:migrate
   post_build:
     commands:
       - echo Build completed on `date`
