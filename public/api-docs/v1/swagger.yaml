@@ -1,0 +1,228 @@
+openapi: 3.0.0
+info:
+  title: Language API
+  description: API to get the list of languages.
+  version: 1.0.0
+servers:
+  - url: https://video-sharing-api.dubbing.co/v1
+  - url: http://localhost:3000/v1
+paths:
+  /login:
+    post:
+      summary: Logs in a user
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "test@gmail.com"
+                password:
+                  type: string
+                  example: "password"
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  error:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                        example: "test@gmail.com"
+                      id:
+                        type: integer
+                        example: 18
+                      auth_token:
+                        type: string
+                        example: "eyJhbGciOiJub25lIn0.eyJzdWIiOjE4LCJlbWFpbCI6InRlc3RAZ21haWwuY29tIn0."
+        '422':
+          description: Error occurred
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  error:
+                    type: string
+                    oneOf:
+                      - example: "User can't be blank"
+                      - example: "password can't be blank"
+                      - example: "password is invalid"
+                  data:
+                    type: string
+                    example: ""
+
+
+  /videos:
+    get:
+      summary: Retrieve videos
+      tags:
+        - Videos
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            example: 1
+          description: The page number to retrieve videos from
+      responses:
+        '200':
+          description: Successful retrieval of videos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 43
+                    title:
+                      type: string
+                      example: "Gigi D&#39;Agostino - L&#39;Uomo Sapiente (Lento Violento e altre storie cd1)"
+                    video_id:
+                      type: string
+                      example: "k4cGcka_mEo"
+                    detail:
+                      type: string
+                      example: "Gigi D'Agostino - L'Uomo Sapiente (Lento Violento e altre storie cd1)"
+                    user:
+                      type: object
+                      properties:
+                        email:
+                          type: string
+                          example: "nathanael@lang-brekke.example"
+    
+    post:
+      summary: Create a new video
+      tags:
+        - Videos
+      parameters:
+        - in: header
+          name: x-authorization
+          required: true
+          schema:
+            type: string
+          description: Your authorization token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  example: ""
+      responses:
+        '200':
+          description: Video created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  error:
+                    type: string
+                    example: ""
+                  data:
+                    type: boolean
+                    example: true
+        '404':
+          description: Failed to create the video
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  error:
+                    type: string
+                    oneOf:
+                      - example: "Url can't be blank"
+                      - example: "Url is invalid"
+                  data:
+                    type: string
+                    example: ""
+
+  /videos/id:
+    get:
+      summary: Retrieve a specific video
+      tags:
+        - Videos
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 50
+          description: The ID of the video to retrieve
+      responses:
+        '200':
+          description: Successful retrieval of the video
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 50
+                  title:
+                    type: string
+                    example: "Ratione quaerat unde praesentium aut sit veniam."
+                  video_id:
+                    type: string
+                    example: "V_cRnbtJpnc"
+                  detail:
+                    type: string
+                    example: "Beatae id nam voluptates."
+                  user:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                        example: "birdie.howe@jacobi.test"
+        '404':
+          description: The video was not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  error:
+                    type: string
+                    example: "Couldn't find Video with 'id'=501"
+                  data:
+                    type: string
+                    example: ""
